@@ -4,19 +4,21 @@ module System.Path.Unix where
 
   import Data.Array (filter)
   import Data.Foldable (foldl)
+  import Data.Path (FilePath())
   import Data.String (charAt, joinWith, length, split)
 
   infixr 5 </>
-  (</>) :: String -> String -> String
+
+  (</>) :: FilePath -> FilePath -> FilePath
   (</>) p p' = joinPath [p, p']
 
-  absolute :: String -> Boolean
+  absolute :: FilePath -> Boolean
   absolute p = charAt 0 p == "/"
 
-  joinPath :: [String] -> String
+  joinPath :: [FilePath] -> FilePath
   joinPath = nonEmpty >>> joinWith "/" >>> normalize
 
-  normalize :: String -> String
+  normalize :: FilePath -> FilePath
   normalize p = split "/" p
               # nonEmpty
               # normalizeDots
@@ -24,18 +26,18 @@ module System.Path.Unix where
               # leading
               # trailing
     where
-      leading :: String -> String
+      leading :: FilePath -> FilePath
       leading p' | absolute p = "/" ++ p'
       leading p'              = p'
-      trailing :: String -> String
+      trailing :: FilePath -> FilePath
       trailing p' | charAt (length p - 1) p == "/" && length p > 1 = p' ++ "/"
       trailing p'                                                  = p'
-      normalizeDots :: [String] -> [String]
+      normalizeDots :: [FilePath] -> [FilePath]
       normalizeDots []          = []
       normalizeDots (".":ps)    = normalizeDots ps
       normalizeDots (_:"..":ps) = normalizeDots ps
       normalizeDots ("..":ps)   = normalizeDots ps
       normalizeDots (p':ps)     = p' : normalizeDots ps
 
-  nonEmpty :: [String] -> [String]
+  nonEmpty :: [FilePath] -> [FilePath]
   nonEmpty = filter ((/=) "")
