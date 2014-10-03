@@ -1,0 +1,10 @@
+{
+  "name": "purescript-unix",
+  "version": "0.0.0",
+  "description": "PureScript tools for working with unix.",
+  "license": "MIT",
+  "devDependencies": {
+    "gulp": "^3.8.8",
+    "gulp-purescript": "0.0.10"
+  }
+}
