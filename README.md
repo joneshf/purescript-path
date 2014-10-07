@@ -1,18 +1,25 @@
 # Module Documentation
 
+## Module Data.Path
+
+### Types
+
+    type FilePath  = String
+
+
 ## Module System.Path.Unix
 
 ### Values
 
-    (</>) :: String -> String -> String
+    (</>) :: FilePath -> FilePath -> FilePath
 
-    absolute :: String -> Boolean
+    absolute :: FilePath -> Boolean
 
-    joinPath :: [String] -> String
+    joinPath :: [FilePath] -> FilePath
 
-    nonEmpty :: [String] -> [String]
+    nonEmpty :: [FilePath] -> [FilePath]
 
-    normalize :: String -> String
+    normalize :: FilePath -> FilePath
 
 
 

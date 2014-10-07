@@ -10,13 +10,16 @@ module System.Path.Unix where
   infixr 5 </>
 
   (</>) :: FilePath -> FilePath -> FilePath
-  (</>) p p' = joinPath [p, p']
+  (</>) "" p                                  = p
+  (</>) p  ""                                 = p
+  (</>) p p' | charAt (length p - 1) p == "/" = p ++ p'
+  (</>) p p'                                  = p ++ "/" ++ p'
 
   absolute :: FilePath -> Boolean
   absolute p = charAt 0 p == "/"
 
   joinPath :: [FilePath] -> FilePath
-  joinPath = nonEmpty >>> joinWith "/" >>> normalize
+  joinPath ps = foldl (</>) "" $ nonEmpty ps
 
   normalize :: FilePath -> FilePath
   normalize p = split "/" p
@@ -40,4 +43,4 @@ module System.Path.Unix where
       normalizeDots (p':ps)     = p' : normalizeDots ps
 
   nonEmpty :: [FilePath] -> [FilePath]
-  nonEmpty = filter ((/=) "")
+  nonEmpty ps = filter ((/=) "") ps
