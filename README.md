@@ -15,6 +15,10 @@
 
     absolute :: FilePath -> Boolean
 
+    basename :: FilePath -> FilePath
+
+    hasTrailing :: FilePath -> Boolean
+
     joinPath :: [FilePath] -> FilePath
 
     nonEmpty :: [FilePath] -> [FilePath]
