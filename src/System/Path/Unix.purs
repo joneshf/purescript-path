@@ -4,8 +4,9 @@ module System.Path.Unix where
 
   import Data.Array (filter, last)
   import Data.Foldable (foldl)
-  import Data.Maybe (fromMaybe)
+  import Data.Maybe (fromMaybe, Maybe(..))
   import Data.Path (FilePath())
+  import Data.Char (Char(), charString)
   import Data.String (charAt, drop, joinWith, length, split)
 
   infixr 5 </>
@@ -19,10 +20,10 @@ module System.Path.Unix where
   (</>) p p'                                = p ++ "/" ++ p'
 
   absolute :: FilePath -> Boolean
-  absolute p = charAt 0 p == "/"
+  absolute p = (charString <$> charAt 0 p) == Just "/"
 
   hasTrailing :: FilePath -> Boolean
-  hasTrailing p = charAt (length p - 1) p == "/"
+  hasTrailing p = (charString <$> charAt (length p - 1) p) == Just "/"
 
   joinPath :: [FilePath] -> FilePath
   joinPath ps = foldl (</>) "" $ nonEmpty ps
