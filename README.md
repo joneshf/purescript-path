@@ -4,7 +4,7 @@
 
 ### Types
 
-    type FilePath = String
+    type FilePath  = String
 
 
 ## Module System.Path.Unix

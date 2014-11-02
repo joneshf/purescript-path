@@ -4,9 +4,12 @@
   "description": "PureScript tools for working with paths.",
   "license": "MIT",
   "dependencies": {
-    "purescript-arrays":                "~0.2.1",
-    "purescript-foldable-traversable":  "~0.1.3",
-    "purescript-strings":               "~0.4.0",
-    "purescript-maybe":                 "~0.2.1"
+    "purescript-arrays": "~0.2.1",
+    "purescript-foldable-traversable": "~0.1.3",
+    "purescript-strings": "~0.4.0",
+    "purescript-maybe": "~0.2.1"
+  },
+  "devDependencies": {
+    "purescript-strongcheck": "~0.3.4"
   }
 }

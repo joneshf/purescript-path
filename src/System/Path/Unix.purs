@@ -43,11 +43,12 @@ module System.Path.Unix where
       trailing p' | hasTrailing p  && length p > 1 = p' ++ "/"
       trailing p'                                  = p'
       normalizeDots :: [FilePath] -> [FilePath]
-      normalizeDots []          = []
-      normalizeDots (".":ps)    = normalizeDots ps
-      normalizeDots (_:"..":ps) = normalizeDots ps
-      normalizeDots ("..":ps)   = normalizeDots ps
-      normalizeDots (p':ps)     = p' : normalizeDots ps
+      normalizeDots []                  = []
+      normalizeDots (".":ps)            = normalizeDots ps
+      normalizeDots (p':_:"..":"..":ps) = normalizeDots (p':"..":ps)
+      normalizeDots (_:"..":ps)         = normalizeDots ps
+      normalizeDots ("..":ps)           = normalizeDots ps
+      normalizeDots (p':ps)             = p' : normalizeDots ps
 
   nonEmpty :: [FilePath] -> [FilePath]
   nonEmpty ps = filter ((/=) "") ps
