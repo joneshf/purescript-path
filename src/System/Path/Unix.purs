@@ -2,7 +2,7 @@ module System.Path.Unix where
 
   -- Some random unix path things that are useful.
 
-  import Data.Array (filter, last)
+  import Data.Array (filter, init, last, snoc)
   import Data.Foldable (foldl)
   import Data.Maybe (fromMaybe, Maybe(..))
   import Data.Path (FilePath())
@@ -31,7 +31,7 @@ module System.Path.Unix where
   normalize :: FilePath -> FilePath
   normalize p = split "/" p
               # nonEmpty
-              # normalizeDots
+              # normalizeDots []
               # joinWith "/"
               # leading
               # trailing
@@ -42,13 +42,11 @@ module System.Path.Unix where
       trailing :: FilePath -> FilePath
       trailing p' | hasTrailing p  && length p > 1 = p' ++ "/"
       trailing p'                                  = p'
-      normalizeDots :: [FilePath] -> [FilePath]
-      normalizeDots []                  = []
-      normalizeDots (".":ps)            = normalizeDots ps
-      normalizeDots (p':_:"..":"..":ps) = normalizeDots (p':"..":ps)
-      normalizeDots (_:"..":ps)         = normalizeDots ps
-      normalizeDots ("..":ps)           = normalizeDots ps
-      normalizeDots (p':ps)             = p' : normalizeDots ps
+      normalizeDots :: [FilePath] -> [FilePath] -> [FilePath]
+      normalizeDots acc []        = acc
+      normalizeDots acc (".":ps)  = normalizeDots acc                       ps
+      normalizeDots acc ("..":ps) = normalizeDots (fromMaybe [] $ init acc) ps
+      normalizeDots acc (p:ps)    = normalizeDots (acc `snoc` p)            ps
 
   nonEmpty :: [FilePath] -> [FilePath]
   nonEmpty ps = filter ((/=) "") ps

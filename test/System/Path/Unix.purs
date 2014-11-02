@@ -37,7 +37,7 @@ module Test.System.Path.Unix where
     let first = runAlphaNumString str
         second = runAlphaNumString str'
         third = runAlphaNumString str''
-    in normalize (first </> second </> ".." </> ".." </> ".." </> ".." </> third) == third
+    in normalize (joinPath [first, second, third, "..", "..", "..", "..", third]) == third
 
   main :: QC Unit
   main = quickCheck propNormalize
