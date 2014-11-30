@@ -1,6 +1,6 @@
 {
   "name": "purescript-path",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "PureScript tools for working with paths.",
   "license": "MIT",
   "devDependencies": {
