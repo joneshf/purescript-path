@@ -15,8 +15,6 @@ module Test.System.Path.Unix where
   propNormalize :: AlphaNumString -> AlphaNumString -> AlphaNumString -> Boolean
   propNormalize str str' str'' = and
     [ propNormalizeIdentity str
-    , propNormalize1DotDot str str'
-    , propNormalizeManyDotDot str str' str''
     ]
 
   propNormalizeIdentity :: AlphaNumString -> Boolean
@@ -26,18 +24,31 @@ module Test.System.Path.Unix where
   -- TODO: These seem pretty janky.
   -- Should be actual properties here, rather than these hardcoded cases.
 
-  propNormalize1DotDot :: AlphaNumString -> AlphaNumString -> Boolean
-  propNormalize1DotDot str str' =
+  normalize1DotDot :: AlphaNumString -> AlphaNumString -> Boolean
+  normalize1DotDot str str' =
     let first = runAlphaNumString str
         second = runAlphaNumString str'
     in normalize (first </> ".." </> second) == second
 
-  propNormalizeManyDotDot :: AlphaNumString -> AlphaNumString -> AlphaNumString -> Boolean
-  propNormalizeManyDotDot str str' str''=
+  normalizeManyDotDot :: AlphaNumString -> AlphaNumString -> AlphaNumString -> Boolean
+  normalizeManyDotDot str str' str'' =
     let first = runAlphaNumString str
         second = runAlphaNumString str'
         third = runAlphaNumString str''
     in normalize (joinPath [first, second, third, "..", "..", "..", "..", third]) == third
 
+  propUnixWinIso :: AlphaNumString -> AlphaNumString -> AlphaNumString -> Boolean
+  propUnixWinIso str str' str'' =
+    let first = runAlphaNumString str
+        second = runAlphaNumString str'
+        third = runAlphaNumString str''
+        unixPath = "C:" </> first </> second </> third
+        winPath = "C:\\" ++ first ++ "\\" ++ second ++ "\\" ++ third
+    in win2Unix (unix2Win unixPath) == unixPath
+
   main :: QC Unit
-  main = quickCheck propNormalize
+  main = do
+    quickCheck propNormalize
+    quickCheck normalize1DotDot
+    quickCheck normalizeManyDotDot
+    quickCheck propUnixWinIso

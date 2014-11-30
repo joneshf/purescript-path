@@ -25,5 +25,9 @@
 
     normalize :: FilePath -> FilePath
 
+    unix2Win :: FilePath -> FilePath
+
+    win2Unix :: FilePath -> FilePath
+
 
 

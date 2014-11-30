@@ -55,3 +55,13 @@ module System.Path.Unix where
   basename p = split "/" p
              # last
              # fromMaybe ""
+
+  -- Converts a path with reverse solidi to a path with solidi.
+  win2Unix :: FilePath -> FilePath
+  win2Unix p = split "\\" p
+             # joinWith "/"
+
+  -- Converts a path with solidi to a path with reverse solidi.
+  unix2Win :: FilePath -> FilePath
+  unix2Win p = split "/" p
+             # joinWith "\\"
